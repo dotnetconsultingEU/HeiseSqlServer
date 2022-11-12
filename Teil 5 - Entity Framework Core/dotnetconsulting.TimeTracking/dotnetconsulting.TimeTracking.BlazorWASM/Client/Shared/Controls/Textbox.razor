@@ -1,0 +1,44 @@
+﻿@using System.Linq.Expressions
+
+<div class="form-group">
+    <label for="t1" class="control-label">@Label</label><p />
+    <div class="col-3">
+        <InputText id="t1" class="form-control" @bind-Value="Value" placeholder="@Placeholder" maxlength="@MaxLength" />
+    </div>
+    <ValidationMessage For="@ValidationMessage" />
+</div>
+
+@code {
+    private string _value;
+
+    [Parameter]
+    public string Value
+    {
+        get => _value;
+        set
+        {
+            if (_value == value)
+                return;
+            else
+            {
+                _value = value;
+                ValueChanged.InvokeAsync(value);
+            }
+        }
+    }
+
+    [Parameter]
+    public EventCallback<string> ValueChanged { get; set; }
+
+    [Parameter]
+    public string Placeholder { get; set; }
+
+    [Parameter]
+    public int MaxLength { get; set; } = 50;
+
+    [Parameter]
+    public string Label { get; set; }
+
+    [Parameter]
+    public Expression<Func<string>> ValidationMessage { get; set; }
+}

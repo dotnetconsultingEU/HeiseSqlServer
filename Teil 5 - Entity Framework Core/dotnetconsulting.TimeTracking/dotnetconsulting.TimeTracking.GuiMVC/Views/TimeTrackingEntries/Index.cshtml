@@ -1,0 +1,138 @@
+﻿
+@model TimeTrackingIndexViewModel
+
+@{ TimeSpan durationSum = new TimeSpan(); }
+
+<h2>Gebuchte Zeiten</h2>
+<style>
+    .doubleunderline {
+        text-decoration: double;
+        border-bottom: 1px solid #000;
+    }
+</style>
+<p>
+    <a asp-action="Create">Neuen Eintrag anlegen</a>
+</p>
+<form>
+    <div class="form-group">
+        <label asp-for="FilterStart" class="col-md-1 control-label"></label>
+        <div class="col-md-2">
+            <input asp-for="FilterStart" name="s" class="form-control" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label asp-for="FilterEnd" class="col-md-1 control-label"></label>
+        <div class="col-md-2">
+            <input asp-for="FilterEnd" name="e" class="form-control" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label asp-for="OrderId" class="col-md-1 control-label"></label>
+        <div class="col-md-2">
+            <select asp-for="OrderId" asp-items="@Model.Orders" name="order">
+                <option value="">(Alle)</option>
+            </select>
+        </div>
+    </div>
+    <button>Anwenden</button>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    <label asp-for="List.First().Day"></label>
+                </th>
+                <th>
+                    <label asp-for="List.First().CustomerAndOrder"></label>
+                </th>
+                <th>
+                    <label asp-for="List.First().Start"></label>
+                </th>
+                <th>
+                    <label asp-for="List.First().End"></label>
+                </th>
+                <th>
+                    <label asp-for="List.First().Break"></label>
+                </th>
+                <th>
+                    <label asp-for="List.First().Duration"></label>
+                </th>
+                <th>
+                    <label asp-for="List.First().Place"></label>
+                </th>
+                <th>
+                    <label asp-for="List.First().Description"></label>
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.List)
+            {
+                // Dauer der Buchungen aufsummieren
+                durationSum += item.Duration;
+
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Day)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CustomerAndOrder)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Start)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.End)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Break)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Duration)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Place)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Bearbeiten", "Edit", new { id = item.Id }) |
+                        @Html.ActionLink("Löschen", "Delete", new { id = item.Id }, new { onclick = "return confirm('Buchung löschen?');" })
+                    </td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <th>
+                    &nbsp;
+                </th>
+                <th>
+                    &nbsp;
+                </th>
+                <th>
+                    &nbsp;
+                </th>
+                <th>
+                    &nbsp;
+                </th>
+                <td>
+                    &nbsp;
+                </td>
+                <th>
+                    <label class="doubleunderline">@durationSum.ToString(@"hh\:mm")</label>
+                </th>
+                <th>
+                    &nbsp;
+                </th>
+                <th>
+                    &nbsp;
+                </th>
+                <th>
+                    &nbsp;
+                </th>
+            </tr>
+        </tfoot>
+    </table>
+</form>

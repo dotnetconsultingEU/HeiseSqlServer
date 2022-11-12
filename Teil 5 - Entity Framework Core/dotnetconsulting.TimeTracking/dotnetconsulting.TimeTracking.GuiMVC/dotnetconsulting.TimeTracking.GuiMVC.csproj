@@ -1,0 +1,54 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <UserSecretsId>aspnet-dotnetconsulting.TimeTracking.GuiMVC-5EF9E76A-1170-4F24-90C4-516C161068F6</UserSecretsId>
+    <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+
+    <!-- Im .NET 6.0 Previe noch ein Problem -->
+    <!--<AnalysisLevel>latest</AnalysisLevel>-->
+    <AssemblyName>dotnetconsulting.TimeTracking.GuiMVC</AssemblyName>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <NoWarn>1701;1702;CA2252</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <NoWarn>1701;1702;CA2252</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Data\Migrations\00000000000000_CreateIdentitySchema.cs" />
+    <Compile Remove="Data\Migrations\00000000000000_CreateIdentitySchema.Designer.cs" />
+    <Compile Remove="Data\Migrations\ApplicationDbContextModelSnapshot.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="11.0.1" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="6.0.7" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.7" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.7" />
+    <!--<PackageReference Include="Microsoft.CodeAnalysis.Common" Version="3.10.0-3.final" />-->
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="6.0.7" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.7" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="6.0.7" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.7" PrivateAssets="All" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\dotnetconsulting.TimeTracking.AppLogic\dotnetconsulting.TimeTracking.AppLogic.csproj" />
+    <ProjectReference Include="..\dotnetconsulting.TimeTracking.CosmosDBDocumentSQLRepository\dotnetconsulting.TimeTracking.CosmosDBDocumentSQLRepository.csproj" />
+    <ProjectReference Include="..\dotnetconsulting.TimeTracking.EFCosmosSqlRepository\dotnetconsulting.TimeTracking.EFCosmosSqlRepository.csproj" />
+    <ProjectReference Include="..\dotnetconsulting.TimeTracking.EFRepository\dotnetconsulting.TimeTracking.EFRepository.csproj" />
+    <ProjectReference Include="..\dotnetconsulting.TimeTracking.Interfaces\dotnetconsulting.TimeTracking.Interfaces.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Data\Migrations\" />
+  </ItemGroup>
+
+</Project>

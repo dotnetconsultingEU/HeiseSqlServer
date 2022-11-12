@@ -1,0 +1,102 @@
+[
+  {
+    "id": "3",
+    "CustomerId": -1,
+    "OrderNr": "Order 3",
+    "Created": "2018-08-25T00:00:00",
+    "Description": null,
+    "Discriminator": "Order"
+  },
+  {
+    "id": "2",
+    "CustomerId": -1,
+    "OrderNr": "Order 2",
+    "Created": "2018-08-25T00:00:00",
+    "Description": null,
+    "Discriminator": "Order"
+  },
+  {
+    "id": "-1",
+    "IsActive": true,
+    "Displayname": "Customer 1",
+    "Comment": null,
+    "Discriminator": "Customer"
+  },
+  {
+    "id": "-3",
+    "IsActive": true,
+    "Displayname": "Customer 3",
+    "Comment": null,
+    "Discriminator": "Customer"
+  },
+  {
+    "id": "5",
+    "CustomerId": -2,
+    "OrderNr": "Order 5",
+    "Created": "2018-08-25T00:00:00",
+    "Description": null,
+    "Discriminator": "Order"
+  },
+  {
+    "id": "-4",
+    "IsActive": true,
+    "Displayname": "Customer 4",
+    "Comment": null,
+    "Discriminator": "Customer"
+  },
+  {
+    "id": "-2",
+    "IsActive": true,
+    "Displayname": "Customer 2",
+    "Comment": null,
+    "Discriminator": "Customer"
+  },
+  {
+    "id": "-5",
+    "IsActive": true,
+    "Displayname": "Customer 5",
+    "Comment": null,
+    "Discriminator": "Customer"
+  },
+  {
+    "id": "4",
+    "CustomerId": -2,
+    "OrderNr": "Order 4",
+    "Created": "2018-08-25T00:00:00",
+    "Description": null,
+    "Discriminator": "Order"
+  },
+  {
+    "id": "1",
+    "CustomerId": -1,
+    "OrderNr": "Order 1",
+    "Created": "2018-08-25T00:00:00",
+    "Description": null,
+    "Discriminator": "Order"
+  },
+  {
+    "id": "-679289146",
+    "Order": null,
+    "OrderId": 1,
+    "Day": "2018-09-12T00:00:00",
+    "Start": "08:00:00",
+    "End": "10:00:00",
+    "Break": "00:00:00",
+    "Place": "(Remote)",
+    "Description": "ABc",
+    "CreatedOrModified": "0001-01-01T00:00:00",
+    "Discriminator": "Entry"
+  },
+  {
+    "id": "1054314365",
+    "Order": null,
+    "OrderId": 1,
+    "Day": "2018-09-12T00:00:00",
+    "Start": "08:00:00",
+    "End": "10:00:00",
+    "Break": "00:00:00",
+    "Place": "(Remote)",
+    "Description": "ABc",
+    "CreatedOrModified": "0001-01-01T00:00:00",
+    "Discriminator": "Entry"
+  }]

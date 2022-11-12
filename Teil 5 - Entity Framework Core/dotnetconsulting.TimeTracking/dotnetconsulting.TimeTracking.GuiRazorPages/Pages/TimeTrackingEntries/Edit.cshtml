@@ -1,0 +1,72 @@
+﻿@page
+@model dotnetconsulting.TimeTracking.GuiRazorPages.Pages.TimeTrackingEntries.EditModel
+
+@if (Model.IsNewEntry)
+{
+    <h2>Eintrag hinzufügen</h2>
+}
+else
+{
+    <h2>Eintrag bearbeiten</h2>
+}
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit" method="post">
+            <input asp-for="Id" class="form-control" />
+            <div class="form-group">
+                <label asp-for="OrderId" class="control-label"></label><br />
+                <select asp-for="OrderId" asp-items="@Model.Orders" class="form-control">
+                    @if (Model.IsNewEntry)
+                    {
+                        <option value="">(Bitte wählen)</option>
+                    }
+                </select>
+                <span asp-validation-for="OrderId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Start" class="control-label"></label>
+                <input asp-for="Start" class="form-control" />
+                <span asp-validation-for="Start" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="End" class="control-label"></label>
+                <input asp-for="End" class="form-control" />
+                <span asp-validation-for="End" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Break" class="control-label"></label>
+                <input asp-for="Break" class="form-control" />
+                <span asp-validation-for="Break" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Day" class="control-label"></label>
+                <input asp-for="Day" class="form-control" />
+                <span asp-validation-for="Day" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Place" class="control-label"></label>
+                <input asp-for="Place" class="form-control" />
+                <span asp-validation-for="Place" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Speichern" class="btn btn-default" />
+            </div>
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="Index">Zurück zur Übersicht</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

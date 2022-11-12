@@ -1,0 +1,39 @@
+﻿@using Microsoft.AspNetCore.Components
+@using System.Linq.Expressions
+
+<div class="form-group">
+    <label for="t1" class="control-label">@Label</label><p />
+    <div class="col-3">
+        <input id="t1" class="form-control" type="time" @bind="Value" />
+    </div>
+    <ValidationMessage For="@ValidationMessage" />
+</div>
+
+@code {
+    private DateTime _value;
+
+    [Parameter]
+    public DateTime Value
+    {
+        get => _value;
+        set
+        {
+            if (_value == value)
+                return;
+            else
+            {
+                _value = value;
+                ValueChanged.InvokeAsync(value);
+            }
+        }
+    }
+
+    [Parameter]
+    public EventCallback<DateTime> ValueChanged { get; set; }
+
+    [Parameter]
+    public string Label { get; set; }
+
+    [Parameter]
+    public Expression<Func<DateTime>> ValidationMessage { get; set; }
+}

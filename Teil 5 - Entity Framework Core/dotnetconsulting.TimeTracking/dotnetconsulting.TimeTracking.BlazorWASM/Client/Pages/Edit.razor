@@ -1,0 +1,81 @@
+﻿@inherits EditBase
+@page "/Edit/{Id:int}"
+@page "/New"
+
+@inject NavigationManager NavigationManager
+
+@using dotnetconsulting.TimeTracking.BlazorWASM.Client.Shared.Controls
+
+<Header Text="@(IsNewEntry ? "Eintrag hinzufügen" : "Eintrag bearbeiten")" />
+
+<hr />
+
+@if (Entry is null || Orders is null)
+{
+    <p><em>Lade...</em></p>
+}
+else
+{
+    <div class="container">
+        <div class="row">
+            @*<EditForm Model="Entry" OnValidSubmit="FormValidSubmitted" OnInvalidSubmit="FormInvalidSubmitted">*@
+            <EditForm EditContext="EditContext" OnSubmit="FormSubmitted">
+                <DataAnnotationsValidator />
+                <!-- Orders -->
+            <div class="form-group">
+                    <label for="description" class="control-label">Auftrag</label>
+                    <div class="col-3">
+                        <InputSelectInt32 id="Orders" class="form-control" @bind-Value="Entry.OrderId">
+                            @foreach (var order in Orders)
+                            {
+                            <option value="@order.Id">@order.Caption</option>
+                            }
+                    </InputSelectInt32>
+                    <ValidationMessage For="@(() => Entry.OrderId)" />
+                </div>
+            </div>
+            <!-- Start -->
+            <TimePicker @bind-Value="Entry.Start"
+                        Label="Start:" ValidationMessage="@(() => Entry.Start)"></TimePicker>
+            <!-- End -->
+            <TimePicker @bind-Value="Entry.End"
+                        Label="End:" ValidationMessage="@(() => Entry.End)"></TimePicker>
+            <!-- Break -->
+            <TimePicker @bind-Value="Entry.Break"
+                        Label="Pause:" ValidationMessage="@(() => Entry.Break)"></TimePicker>
+            <!-- Day -->
+            <DatePicker @bind-Value="Entry.Day"
+                        Label="Tag:" ValidationMessage="@(() => Entry.Day)"></DatePicker>
+            <!-- Place -->
+            <Textbox @bind-Value="Entry.Place" MaxLength="50"
+                     Label="Ort:" Placeholder="Bitte eingeben"
+                     ValidationMessage="@(() => Entry.Place)"></Textbox>
+            <!-- Description -->
+            <div class="form-group">
+                <label for="description" class="control-label">Beschreibung</label>
+                <div class="col-3">
+                    <InputTextArea id="description" class="form-control" @bind-Value="Entry.Description" placeholder="Bitte eingeben" rows="4" maxlength="250" />
+                    <ValidationMessage For="@(() => Entry.Description)" />
+                </div>
+            </div>
+            <!-- Buttons/ Links -->
+            <div class="container">
+                <div class="row">
+                    <ValidationSummary />
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <!-- Submit-Button -->
+                        <input type="submit" value="Speichern" class="btn btn-primary" />
+                    </div>
+                    <div class="col">
+                        <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+                            Zurück
+                        </NavLink>
+                    </div>
+                </div>
+            </div>
+        </EditForm>
+    </div>
+</div>
+}

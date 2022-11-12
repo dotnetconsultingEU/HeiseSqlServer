@@ -1,0 +1,303 @@
+﻿@page "/"
+@page "/{OrderId:int}"
+@page "/{OrderId:int}/{Start:datetime}"
+@page "/{OrderId:int}/{Start:datetime}/{End:datetime}"
+
+@page "/index"
+@page "/index/{OrderId:int}"
+@page "/index/{OrderId:int}/{Start:datetime}"
+@page "/index/{OrderId:int}/{Start:datetime}/{End:datetime}"
+
+@page "/indexByDate/{Start:datetime}/{End:datetime}"
+
+@inject HttpClient http
+@inject NavigationManager navManager
+@inject IJSRuntime jsRuntime
+
+@using dotnetconsulting.TimeTracking.BlazorWASM.Shared
+@using Microsoft.AspNetCore.WebUtilities
+@using dotnetconsulting.TimeTracking.BlazorWASM.Client.Shared.Controls
+
+@{
+    // Eine Zeile
+    TimeSpan durationSum = new TimeSpan();
+}
+
+@code {
+    // Mehrere
+    private Order[] orders = null!;
+    private Entry[] entries = null!;
+
+    [Parameter]
+    public DateTime? Start { get; set; }
+    [Parameter]
+    public DateTime? End { get; set; }
+    [Parameter]
+    public int OrderId { get; set; }
+}
+
+<Header2>Gebuchte Zeiten</Header2>
+
+<style>
+    .doubleunderline {
+        text-decoration: double;
+        border-bottom: 1px solid #000;
+    }
+</style>
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+                <label class="col-md control-label">Von</label>
+                <div class="col-md">
+                    <input type="date" class="form-control" @bind="Start" />
+                </div>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="form-group">
+                <label class="col-md control-label">Bis</label>
+                <div class="col-md">
+                    <input type="date" class="form-control" @bind="End" />
+                </div>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="form-group">
+                <label class="col-md control-label">Auftrag</label>
+                <div class="col-md">
+                    @if (orders is null)
+                    {
+                        <p><em>Lade...</em></p>
+                    }
+                    else
+                    {
+                        <select name="order" @bind="OrderId" class="form-control">
+                            @foreach (var order in orders)
+                            {
+                                <option value="@order.Id">@order.Caption</option>
+                            }
+                        </select>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="form-group">
+                <label class="col-md control-label">&nbsp;</label>
+                <button class="btn btn-primary" @onclick="ApplyFilter">Anwenden</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" style="margin: 20px 0px 20px 0px">
+        <div class="col">
+            <a href="@($"new")" class="btn btn-secondary">Anlegen</a>
+        </div>
+    </div>
+
+    <div class="row">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        <label>Tag</label>
+                    </th>
+                    <th>
+                        <label>Auftrag</label>
+                    </th>
+                    <th>
+                        <label>Start</label>
+                    </th>
+                    <th>
+                        <label>Ende</label>
+                    </th>
+                    <th>
+                        <label>Pause</label>
+                    </th>
+                    <th>
+                        <label>Dauer</label>
+                    </th>
+                    <th>
+                        <label>Ort</label>
+                    </th>
+                    <th>
+                        <label>Beschreibung</label>
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            @if (entries == null)
+            {
+                <tr>
+                    <td colspan="9">
+                        <p><em>Lade...</em></p>
+                    </td>
+                </tr>
+            }
+            else
+            {
+                <tbody>
+                    @foreach (var entry in entries)
+                    {
+                        // Dauer der Buchungen aufsummieren
+                        durationSum += TimeSpan.FromMinutes(entry.Duration.Hour * 60 + entry.Duration.Minute);
+
+                        <tr>
+                            <td>@entry.Day.ToString("d")</td>
+                            <td>@entry.Order?.Caption</td>
+                            <td>@entry.Start.ToString("hh:mm")</td>
+                            <td>@entry.End.ToString("hh:mm")</td>
+                            <td>@entry.Break.ToString("hh:mm")</td>
+                            <td>@(entry.Duration.ToString("hh:mm")+"h")</td>
+                            <td>@entry.Place</td>
+                            <td>@entry.Description</td>
+                            <td>
+                                <button class="btn btn-secondary" @onclick="()=>editEntry(entry.Id)">Bearbeiten</button>
+                                <button class="btn btn-danger" @onclick="()=>deleteEntry(entry.Id)">Löschen</button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            }
+            <tfoot>
+                <tr>
+                    <th>
+                        &nbsp;
+                    </th>
+                    <th>
+                        &nbsp;
+                    </th>
+                    <th>
+                        &nbsp;
+                    </th>
+                    <th>
+                        &nbsp;
+                    </th>
+                    <td>
+                        &nbsp;
+                    </td>
+                    <th>
+                        <label class="doubleunderline">@(durationSum.ToString(@"hh\:mm"))h</label>
+                    </th>
+                    <th>
+                        &nbsp;
+                    </th>
+                    <th>
+                        &nbsp;
+                    </th>
+                    <th>
+                        &nbsp;
+                    </th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+
+    <!-- Bei längeren Listen einen 2. Button einfügen -->
+    @if (entries?.Length > 10)
+    {
+        <div class="row" style="margin: 20px 0px 20px 0px">
+            <div class="col">
+                <a href="@($"new")" class="btn btn-secondary">Anlegen</a>
+            </div>
+        </div>
+    }
+    <!--
+    <ErrorBoundary>
+        <ChildContent>
+            <BadComponent />
+        </ChildContent>
+        <ErrorContent Context="ex">
+            <p>
+                Exception: @ex.Message
+            </p>
+        </ErrorContent>
+    </ErrorBoundary>
+    -->
+</div>
+
+@*Url: @buildEntryUri()*@
+
+@code {
+    // Weiterer Code
+    protected override async Task OnInitializedAsync()
+    {
+        defaultParameters();
+        await loadOrders();
+        await loadEntries();
+    }
+
+    private async Task ApplyFilter(MouseEventArgs e)
+    {
+        await loadEntries();
+    }
+
+    private void defaultParameters()
+    {
+        if (!Start.HasValue)
+            Start = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1).AddMonths(-1);
+    }
+
+    private async Task loadOrders()
+    {
+        orders = null!;
+
+        // Daten laden und ein Element für "Alle Bestellungen"
+        var data = (await http.GetFromJsonAsync<Order[]>("TimeTracking/Orders"))!;
+
+        Order[] completeOrders = new Order[data.Length + 1];
+        completeOrders[0] = new Order() { Id = 0, Caption = "(Alle)" };
+        Array.Copy(data, 0, completeOrders, 1, data.Length);
+
+        orders = completeOrders;
+    }
+
+    private async Task loadEntries()
+    {
+        entries = null!;
+        string entriesUrl = buildEntryUri();
+        entries = (await http.GetFromJsonAsync<Entry[]>(entriesUrl))!;
+    }
+
+    string buildEntryUri()
+    {
+        IDictionary<string, string> parameters = new Dictionary<string, string>();
+
+        if (Start.HasValue)
+            parameters.Add("Start", @$"{Start.Value.Month}-{Start.Value.Day}-{Start.Value.Year}");
+
+        if (End.HasValue)
+            parameters.Add("End", @$"{End.Value.Month}-{End.Value.Day}-{End.Value.Year}");
+
+        if (OrderId != 0)
+            parameters.Add("OrderId", OrderId.ToString());
+
+        return QueryHelpers.AddQueryString("TimeTracking/Entries", parameters);
+    }
+
+    async Task deleteEntry(int id)
+    {
+        // JS-Funktion window.confirm() aufrufen und Rückgabe verwenden
+        bool confirmed = await jsRuntime.InvokeAsync<bool>("confirm", "Are you sure?");
+
+        if (confirmed)
+        {
+            // Web API-Aufruf zum Löschen
+            await http.DeleteAsync($"TimeTracking/Entry?id={id}");
+
+            // Element aus Liste entfernen
+            entries = entries.Where(w => w.Id != id).ToArray();
+        }
+    }
+
+    void editEntry(int id)
+    {
+        string uri = $"Edit/{id}";
+        navManager.NavigateTo(uri);
+    }
+}

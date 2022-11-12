@@ -1,0 +1,46 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <NoWarn>1701;1702;CS0618</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="SqlResources\GetSpeakerDown.sql" />
+    <None Remove="SqlResources\GetSpeakerUp.sql" />
+    <None Remove="SqlResources\vwSpeakerStatsDown.sql" />
+    <None Remove="SqlResources\vwSpeakerStatsUp.sql" />
+    <None Remove="SqlResources\StringLikeDown.sql" />
+    <None Remove="SqlResources\StringLikeUp.sql" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="SqlResources\vwSpeakerStatsDown.sql" />
+    <EmbeddedResource Include="SqlResources\vwSpeakerStatsUp.sql" />
+    <EmbeddedResource Include="SqlResources\GetSpeakerDown.sql" />
+    <EmbeddedResource Include="SqlResources\GetSpeakerUp.sql" />
+    <EmbeddedResource Include="SqlResources\StringLikeDown.sql" />
+    <EmbeddedResource Include="SqlResources\StringLikeUp.sql" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="6.0.7" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.7" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.7">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="6.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="6.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\dotnetconsulting.Samples.Domains\dotnetconsulting.Samples.Domains.csproj" />
+  </ItemGroup>
+
+</Project>
